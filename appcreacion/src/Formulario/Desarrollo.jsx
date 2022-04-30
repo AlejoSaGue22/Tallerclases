@@ -1,5 +1,4 @@
 import React from 'react'
-import {nanoid} from 'nanoid'
 import {firebase} from '../firebase'
 
 
@@ -38,7 +37,7 @@ const Desarrollo = () => {
   )
 
 
-  const guardarDatos = (e) =>{
+  const guardarDatos = async (e) =>{
       e.preventDefault()
       if(!Nombre.trim()){
         setError('Digite el Nombre')
@@ -85,8 +84,8 @@ const Desarrollo = () => {
                  nomFecha: Fechanacimi
 
       }
+        
          await db.collection('Inscripción').add(nuevoDato)
-
          e.target.reset()
          setNombre('')
          setApellido('')
@@ -95,6 +94,7 @@ const Desarrollo = () => {
          setTelefono('')
          setFechanacimi('')
          setError(null)
+
     }catch(error){
         console.log(error)
     }
@@ -138,11 +138,6 @@ const Desarrollo = () => {
             return
     
           }
-          if(!Correo.trim()){
-            setError('Digite el Correo')
-            return
-    
-          }
           if(!Telefono.trim()){
             setError('Ingrese el Telefono')
             return
@@ -160,15 +155,15 @@ const Desarrollo = () => {
             {
     
                 nomN: Nombre,
-                 nomA: Apellido,
-                  nomIden: Identificacion,
-                   nomCor: Correo,
-                    nomTele: Telefono,
-                     nomFecha: Fechanacimi
+                nomA: Apellido,
+                nomIden: Identificacion,
+                nomCor: Correo,
+                nomTele: Telefono,
+                nomFecha: Fechanacimi
     
           })
           const arrayEditado = Listasdatos.map(
-            item => item.id === id ? {id:id, nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}:item
+            item => item.id === id ? {id:id, nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}: item
               )
               setListasdatos(arrayEditado)
               setNombre('')
@@ -184,7 +179,7 @@ const Desarrollo = () => {
         }
     
     
-    
+      }
         
 
       const eliminardatos = async id =>{
@@ -323,6 +318,6 @@ const Desarrollo = () => {
 
        </div>
       )
-  }
-
+  
+}
 export default Desarrollo
