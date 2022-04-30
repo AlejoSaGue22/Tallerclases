@@ -10,8 +10,8 @@ const Desarrollo = () => {
   const [Telefono, setTelefono] = React.useState('')
   const [Fechanacimi, setFechanacimi] = React.useState('')
   const [Listasdatos, setListasdatos] = React.useState([])
-  const [nextNombre, setnextNombre] = React.useState()
   const [id, setId] = React.useState()
+  const [nextNombre, setnextNombre] = React.useState()
   const [error, setError] = React.useState()
 
 
@@ -52,7 +52,7 @@ const Desarrollo = () => {
 
       setListasdatos([
         ...Listasdatos,
-        {id: nanoid(), nomN:Nombre, nomA:Apellido, nomIden:Identificacion, nomCor:Correo, nomTele:Telefono, nomFecha:Fechanacimi}
+        {id: nanoid(), nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}
       ])
 
       e.target.reset()
@@ -75,7 +75,6 @@ const Desarrollo = () => {
       setFechanacimi(item.nomFecha)
       setnextNombre(true)
       setId(item.id)
-      setError(null)
       }
 
       const acepEditar = e =>{
@@ -128,12 +127,10 @@ const Desarrollo = () => {
         setCorreo('')
         setTelefono('')
         setFechanacimi('')
-        setnextNombre(true)
+        setnextNombre(false)
         setError(null)
 
       }
-
-      
 
       const eliminardatos = id =>{
         const aux = Listasdatos.filter(item => item.id !== id)
@@ -141,7 +138,7 @@ const Desarrollo = () => {
       }
 
       const cancelar = () =>{
-    
+        setnextNombre(false)
         setNombre('')
         setApellido('')
         setIdentificacion('')
@@ -177,7 +174,11 @@ const Desarrollo = () => {
 
         </div>
         <div className='col-4'>
-           
+            <h4 className='text-center'>
+              {
+                nextNombre ? 'Editar Datos' : 'Agregar Datos'
+              }
+            </h4>
        <form onSubmit ={nextNombre ? acepEditar : guardarDatos}>
          {
            error ? <spa className= 'text-danger'>{error} </spa> 
@@ -224,22 +225,27 @@ const Desarrollo = () => {
          <input
           className='form-control mb-2'
           type = 'date'
+          label = 'Fecha de nacimiento'
           onChange={(e)=> setFechanacimi(e.target.value)}
           value={Fechanacimi}
           />
+          {
+            nextNombre ?
+            (
               <>
               <button className = 'btn btn-warning btnblock' type='submit' 
               >Editar</button>
               <button className = 'btn btn-danger btn-block mx-2' onClick={() => cancelar()}
               >Cancelar </button>
               </>
-        
+            ) 
+            :
               <button
               className='btn btn-primary btn-block'
               type='submit'
               >Agregar</button>
 
-        
+          }
          
      </form>
         </div>
