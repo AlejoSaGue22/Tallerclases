@@ -9,8 +9,8 @@ const Desarrollo = () => {
   const [Correo, setCorreo] = React.useState('')
   const [Telefono, setTelefono] = React.useState('')
   const [Fechanacimi, setFechanacimi] = React.useState('')
-  const [id, setId] = React.useState()
   const [Listasdatos, setListasdatos] = React.useState([])
+  const [id, setId] = React.useState()
   const [error, setError] = React.useState()
 
 
@@ -36,11 +36,7 @@ const Desarrollo = () => {
         return
 
       }
-      if(!Correo.trim()){
-        setError('Digite el Correo')
-        return
-
-      }
+  
       if(!Telefono.trim()){
         setError('Ingrese el Telefono')
         return
@@ -55,7 +51,7 @@ const Desarrollo = () => {
 
       setListasdatos([
         ...Listasdatos,
-        {id: id, nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}
+        {id: id, nomN:Nombre, nomA:Apellido, nomIden:Identificacion, nomCor:Correo, nomTele:Telefono, nomFecha:Fechanacimi}
       ])
 
       e.target.reset()
@@ -69,7 +65,34 @@ const Desarrollo = () => {
 
   }
 
+      const editarDatos = item =>{
+      setNombre(item.nomN)
+      setApellido(item.nomA)
+      setIdentificacion(item.nomIden)
+      setCorreo(item.nomCor)
+      setTelefono(item.nomTele)
+      setFechanacimi(item.nomFecha)
+      setId(item.id)
+      }
+
       
+
+      const eliminardatos = id =>{
+        const aux = Listasdatos.filter(item => item.id !== id)
+        setListasdatos(aux)
+      }
+
+      const cancelar = () =>{
+    
+        setNombre('')
+        setApellido('')
+        setIdentificacion('')
+        setCorreo('')
+        setTelefono('')
+        setFechanacimi('')
+        setError(null)
+      }
+  
   return (
     <div className='container mt-5'>
     <h2 className= 'text-center'> INSCRIPCION EVENTOS DE ALEJOSAN</h2>
@@ -82,7 +105,10 @@ const Desarrollo = () => {
           Listasdatos.map(item=>(
             <li className='list-group-item' key={item.id}>
          <spam className='lead'>{item.nomN}-{item.nomA}-{item.nomIden}-{item.nomCor}-{item.nomTele}-{item.nomFecha}</spam>
-              
+              <button className='btn btn-info btn-sm float-end mx-2' onClick={()=>eliminardatos(item.id)}> Eliminar dato
+              </button>
+              <button className='btn btn-secondary btn-sm float-end mx-2' onClick={()=>editarDatos(item)}> Editar dato
+              </button>
 
             </li>
 
@@ -93,9 +119,13 @@ const Desarrollo = () => {
 
         </div>
         <div className='col-4'>
-            <h4 className='text-center'>
-            </h4>
-       <form onSubmit = {guardarDatos}>
+           
+       <form onSubmit ={guardarDatos}>
+         {
+           error ? <spa className= 'text-danger'>{error} </spa> 
+           : null
+
+         }
           <input
           className='form-control mb-2'
           type = 'text'
@@ -119,8 +149,9 @@ const Desarrollo = () => {
           />
           <input
           className='form-control mb-2'
-          type = 'text'
-          placeholder = 'Ingrese Correo'
+          type = 'email'
+          id="floatingInputValue"
+          placeholder="name@example.com"
           onChange={(e)=> setCorreo(e.target.value)}
           value={Correo}
           />
@@ -138,12 +169,19 @@ const Desarrollo = () => {
           onChange={(e)=> setFechanacimi(e.target.value)}
           value={Fechanacimi}
           />
+              <>
+              <button className = 'btn btn-warning btnblock' type='submit' 
+              >Editar</button>
+              <button className = 'btn btn-danger btn-block mx-2' onClick={() => cancelar()}
+              >Cancelar </button>
+              </>
+        
               <button
               className='btn btn-primary btn-block'
               type='submit'
               >Agregar</button>
 
-          
+        
          
      </form>
         </div>
