@@ -1,20 +1,20 @@
+
+
 import React from 'react'
+
 import {firebase} from '../firebase'
 
-
 const Desarrollo = () => {
-  const [Nombre, setNombre] = React.useState('')
-  const [Apellido, setApellido] = React.useState('')
-  const [Identificacion, setIdentificacion] = React.useState('')
-  const [Correo, setCorreo] = React.useState('')
-  const [Telefono, setTelefono] = React.useState('')
-  const [Fechanacimi, setFechanacimi] = React.useState('')
-  const [Listasdatos, setListasdatos] = React.useState([])
-  const [id, setId] = React.useState()
-  const [nextNombre, setnextNombre] = React.useState()
-  const [error, setError] = React.useState()
-
-
+    const [Nombre, setNombre] = React.useState('')
+    const [Apellido, setApellido] = React.useState('')
+    const [Identificacion, setIdentificacion] = React.useState('')
+    const [Correo, setCorreo] = React.useState('')
+    const [Telefono, setTelefono] = React.useState('')
+    const [Fechanacimi, setFechanacimi] = React.useState('')
+    const [Listasdatos, setListasdatos] = React.useState([])
+    const [id, setId] = React.useState()
+    const [nextNombre, setnextNombre] = React.useState()
+    const [error, setError] = React.useState()
   React.useEffect(()=>{
     const obtenerinfo = async () =>{
       try{
@@ -22,7 +22,7 @@ const Desarrollo = () => {
         const data = await db.collection('Inscripción').get()
         const arrayDatos= data.docs.map(item =>(
             {
-              id:item.id, ...item.data()
+              id: item.id, ...item.data()
             }
 
         ))
@@ -71,51 +71,52 @@ const Desarrollo = () => {
 
     
       }
-
       try{
+
         const db = firebase.firestore()
-        const nuevoDato = {
-
-            nomN: Nombre,
-             nomA: Apellido,
-              nomIden: Identificacion,
-               nomCor: Correo,
+      const nuevoDatos = {
+                nomN: Nombre,
+                nomA: Apellido,
+                nomIden: Identificacion,
+                nomCor: Correo,
                 nomTele: Telefono,
-                 nomFecha: Fechanacimi
-
+                nomFecha: Fechanacimi
       }
-        
-         await db.collection('Inscripción').add(nuevoDato)
-         e.target.reset()
-         setNombre('')
-         setApellido('')
-         setIdentificacion('')
-         setCorreo('')
-         setTelefono('')
-         setFechanacimi('')
-         setError(null)
 
+       await db.collection('Inscripción').add(nuevoDatos)
+
+
+
+      e.target.reset()
+      setNombre('')
+      setApellido('')
+      setIdentificacion('')
+      setCorreo('')
+      setTelefono('')
+      setFechanacimi('')
+      setError(null)
+
+  
     }catch(error){
         console.log(error)
-    }
-
-
-     
-
-  }
-
-      const editarDatos = item =>{
-      setNombre(item.nomN)
-      setApellido(item.nomA)
-      setIdentificacion(item.nomIden)
-      setCorreo(item.nomCor)
-      setTelefono(item.nomTele)
-      setFechanacimi(item.nomFecha)
-      setnextNombre(true)
-      setId(item.id)
       }
 
-      const acepEditar = async e =>{
+    }
+
+      
+
+      const editarDatos = item =>{
+        setNombre(item.nomN)
+        setApellido(item.nomA)
+        setIdentificacion(item.nomIden)
+        setCorreo(item.nomCor)
+        setTelefono(item.nomTele)
+        setFechanacimi(item.nomFecha)
+        setnextNombre(true)
+        setId(item.id)
+      }
+
+      const aceptarEditar = async e =>{
         e.preventDefault()
 
         if(!Nombre.trim()){
@@ -148,20 +149,19 @@ const Desarrollo = () => {
             return
     
           }
-
-          try{
-            const db = firebase.firestore()
-            await db.collection('Inscripción').doc(id).update(
-            {
-    
+        try{
+          const db = firebase.firestore()
+          await db.collection('Inscripción').doc(id).update({
                 nomN: Nombre,
                 nomA: Apellido,
                 nomIden: Identificacion,
                 nomCor: Correo,
                 nomTele: Telefono,
                 nomFecha: Fechanacimi
-    
-          })
+
+          }
+
+          )
           const arrayEditado = Listasdatos.map(
             item => item.id === id ? {id:id, nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}: item
               )
@@ -173,25 +173,30 @@ const Desarrollo = () => {
               setTelefono('')
               setFechanacimi('')
               setnextNombre(false)
-              setError(null)         
+              setError(null)
+             
         }catch(error){
-            console.log(error)
+          console.log(error)
         }
-    
-    
-      }
+
+
         
 
+      }
+
+      const img="https://picsum.photos/seed/picsum/200/300/seed/{seed}"
+
       const eliminardatos = async id =>{
+
         try{
-            const db = firebase.firestore()
-            await db.collection('Inscripción').doc(id).delete()
-            const aux = Listasdatos.filter(item => item.id !== id)
-            setListasdatos(aux)
-  
-          }catch(error){
-            console.log(error)
-          }
+          const db = firebase.firestore()
+          await db.collection('Inscripción').doc(id).delete()
+          const aux = Listasdatos.filter(item => item.id !== id)
+          setListasdatos(aux)
+
+        }catch(error){
+          console.log(error)
+        }
         
       }
 
@@ -203,6 +208,7 @@ const Desarrollo = () => {
         setCorreo('')
         setTelefono('')
         setFechanacimi('')
+	    setId('')
         setError(null)
       }
   
@@ -217,27 +223,32 @@ const Desarrollo = () => {
             {
           Listasdatos.map(item=>(
             <li className='list-group-item' key={item.id}>
-         <spam className='lead'>{item.nomN}-{item.nomA}-{item.nomIden}-{item.nomCor}-{item.nomTele}-{item.nomFecha}</spam>
-              <button className='btn btn-info btn-sm float-end mx-2' onClick={()=>eliminardatos(item.id)}> Eliminar dato
+         <spam className='lead'>{item.nomTitulo}-{item.nomAutor}-{item.nomEditorial}-{item.nomEdicion}-{item.nomISBN}-{item.nomFecha}</spam>
+              <button className='btn btn-info btn-sm float-end mx-2' onClick={()=>eliminardatos(item)}> Eliminar dato
               </button>
               <button className='btn btn-secondary btn-sm float-end mx-2' onClick={()=>editarDatos(item)}> Editar dato
               </button>
 
             </li>
 
+            
+
           ))
           }
 
             </ul>
 
+            <img alt='img' src={img} />
+                 
+
         </div>
         <div className='col-4'>
             <h4 className='text-center'>
               {
-                nextNombre ? 'Editar Datos' : 'Agregar Datos'
+                nextNombre ? 'Editar Dato' : 'Agregar Dato'
               }
             </h4>
-       <form onSubmit ={nextNombre ? acepEditar : guardarDatos}>
+       <form onSubmit ={nextNombre ? aceptarEditar : guardarDatos}>
          {
            error ? <spa className= 'text-danger'>{error} </spa> 
            : null
@@ -264,7 +275,7 @@ const Desarrollo = () => {
           onChange={(e)=> setIdentificacion(e.target.value)}
           value={Identificacion}
           />
-          <input
+         <input
           className='form-control mb-2'
           type = 'email'
           id="floatingInputValue"
@@ -272,24 +283,21 @@ const Desarrollo = () => {
           onChange={(e)=> setCorreo(e.target.value)}
           value={Correo}
           />
-          <input
-         className='form-control mb-2'
-         type = 'text'
-         placeholder = 'Ingrese Telefono'
-         onChange={(e)=> setTelefono(e.target.value)}
-         value={Telefono}
-         />
 
          <input
-          className='form-control mb-2'>
+          className='form-control mb-3'
+          type = 'text'
+          placeholder = 'Ingrese Telefono'
+          onChange={(e)=> setTelefono(e.target.value)}
+          value={Telefono}
+          />
+
+        <input
+          className='form-control mb-2'
           type = 'date'
-          label = 'Fecha de nacimiento'
           onChange={(e)=> setFechanacimi(e.target.value)}
           value={Fechanacimi}
-          </input>
-          
-                
-         
+          />
           {
             nextNombre ?
             (
@@ -318,6 +326,6 @@ const Desarrollo = () => {
 
        </div>
       )
-  
-}
+  }
+
 export default Desarrollo
