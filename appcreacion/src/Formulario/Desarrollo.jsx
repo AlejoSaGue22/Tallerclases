@@ -1,5 +1,6 @@
 import React from 'react'
 import {nanoid} from 'nanoid'
+import {firebase} from '../firebase'
 
 
 const Desarrollo = () => {
@@ -13,6 +14,28 @@ const Desarrollo = () => {
   const [id, setId] = React.useState()
   const [nextNombre, setnextNombre] = React.useState()
   const [error, setError] = React.useState()
+
+
+  React.useEffect(()=>{
+    const obtenerinfo = async () =>{
+      try{
+        const db = firebase.firestore()
+        const data = await db.collection('Inscripción').get()
+        const arrayDatos= data.docs.map(item =>(
+            {
+              id:item.id, ...item.data()
+            }
+
+        ))
+        setListasdatos(arrayDatos)
+      }catch(error){
+        console.log(error)
+      }
+    }
+
+    obtenerinfo();
+  }
+  )
 
 
   const guardarDatos = (e) =>{
@@ -47,22 +70,37 @@ const Desarrollo = () => {
         setError('Ingrese la Fecha')
         return
 
+    
       }
 
+      try{
+        const db = firebase.firestore()
+        const nuevoDato = {
 
-      setListasdatos([
-        ...Listasdatos,
-        {id: nanoid(), nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}
-      ])
+            nomN: Nombre,
+             nomA: Apellido,
+              nomIden: Identificacion,
+               nomCor: Correo,
+                nomTele: Telefono,
+                 nomFecha: Fechanacimi
 
-      e.target.reset()
-      setNombre('')
-      setApellido('')
-      setIdentificacion('')
-      setCorreo('')
-      setTelefono('')
-      setFechanacimi('')
-      setError(null)
+      }
+         await db.collection('Inscripción').add(nuevoDato)
+
+         e.target.reset()
+         setNombre('')
+         setApellido('')
+         setIdentificacion('')
+         setCorreo('')
+         setTelefono('')
+         setFechanacimi('')
+         setError(null)
+    }catch(error){
+        console.log(error)
+    }
+
+
+     
 
   }
 
@@ -77,7 +115,7 @@ const Desarrollo = () => {
       setId(item.id)
       }
 
-      const acepEditar = e =>{
+      const acepEditar = async e =>{
         e.preventDefault()
 
         if(!Nombre.trim()){
@@ -115,26 +153,51 @@ const Desarrollo = () => {
             return
     
           }
+
+          try{
+            const db = firebase.firestore()
+            await db.collection('Inscripción').doc(id).update(
+            {
+    
+                nomN: Nombre,
+                 nomA: Apellido,
+                  nomIden: Identificacion,
+                   nomCor: Correo,
+                    nomTele: Telefono,
+                     nomFecha: Fechanacimi
+    
+          })
+          const arrayEditado = Listasdatos.map(
+            item => item.id === id ? {id:id, nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}:item
+              )
+              setListasdatos(arrayEditado)
+              setNombre('')
+              setApellido('')
+              setIdentificacion('')
+              setCorreo('')
+              setTelefono('')
+              setFechanacimi('')
+              setnextNombre(false)
+              setError(null)         
+        }catch(error){
+            console.log(error)
+        }
     
     
-        const arrayEditado = Listasdatos.map(
-      item => item.id === id ? {id:id, nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}:item
-        )
-        setListasdatos(arrayEditado)
-        setNombre('')
-        setApellido('')
-        setIdentificacion('')
-        setCorreo('')
-        setTelefono('')
-        setFechanacimi('')
-        setnextNombre(false)
-        setError(null)
+    
+        
 
-      }
-
-      const eliminardatos = id =>{
-        const aux = Listasdatos.filter(item => item.id !== id)
-        setListasdatos(aux)
+      const eliminardatos = async id =>{
+        try{
+            const db = firebase.firestore()
+            await db.collection('Inscripción').doc(id).delete()
+            const aux = Listasdatos.filter(item => item.id !== id)
+            setListasdatos(aux)
+  
+          }catch(error){
+            console.log(error)
+          }
+        
       }
 
       const cancelar = () =>{
@@ -223,12 +286,15 @@ const Desarrollo = () => {
          />
 
          <input
-          className='form-control mb-2'
+          className='form-control mb-2'>
           type = 'date'
           label = 'Fecha de nacimiento'
           onChange={(e)=> setFechanacimi(e.target.value)}
           value={Fechanacimi}
-          />
+          </input>
+          
+                
+         
           {
             nextNombre ?
             (
