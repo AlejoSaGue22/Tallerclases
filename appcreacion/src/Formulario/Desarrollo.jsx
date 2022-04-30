@@ -15,6 +15,7 @@ const Desarrollo = () => {
     const [id, setId] = React.useState()
     const [nextNombre, setnextNombre] = React.useState()
     const [error, setError] = React.useState()
+
   React.useEffect(()=>{
     const obtenerinfo = async () =>{
       try{
@@ -22,7 +23,7 @@ const Desarrollo = () => {
         const data = await db.collection('Inscripción').get()
         const arrayDatos= data.docs.map(item =>(
             {
-              id: item.id, ...item.data()
+              id:item.id, ...item.data()
             }
 
         ))
@@ -163,7 +164,7 @@ const Desarrollo = () => {
 
           )
           const arrayEditado = Listasdatos.map(
-            item => item.id === id ? {id:id, nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}: item
+            item => item.id === id ? {id:id, nomN:Nombre, nomA:Apellido, nomIden:Identificacion, nomCor:Correo, nomTele:Telefono, nomFecha:Fechanacimi}: item
               )
               setListasdatos(arrayEditado)
               setNombre('')
