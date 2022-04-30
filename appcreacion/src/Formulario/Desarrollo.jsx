@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {nanoid} from 'nanoid'
 
 
 const Desarrollo = () => {
@@ -10,6 +10,7 @@ const Desarrollo = () => {
   const [Telefono, setTelefono] = React.useState('')
   const [Fechanacimi, setFechanacimi] = React.useState('')
   const [Listasdatos, setListasdatos] = React.useState([])
+  const [nextNombre, setnextNombre] = React.useState()
   const [id, setId] = React.useState()
   const [error, setError] = React.useState()
 
@@ -51,7 +52,7 @@ const Desarrollo = () => {
 
       setListasdatos([
         ...Listasdatos,
-        {id: id, nomN:Nombre, nomA:Apellido, nomIden:Identificacion, nomCor:Correo, nomTele:Telefono, nomFecha:Fechanacimi}
+        {id: nanoid(), nomN:Nombre, nomA:Apellido, nomIden:Identificacion, nomCor:Correo, nomTele:Telefono, nomFecha:Fechanacimi}
       ])
 
       e.target.reset()
@@ -72,7 +73,64 @@ const Desarrollo = () => {
       setCorreo(item.nomCor)
       setTelefono(item.nomTele)
       setFechanacimi(item.nomFecha)
+      setnextNombre(true)
       setId(item.id)
+      setError(null)
+      }
+
+      const acepEditar = e =>{
+        e.preventDefault()
+
+        if(!Nombre.trim()){
+            setError('Digite el Nombre')
+            return
+    
+          }
+          if(!Apellido.trim()){
+            setError('Digite el Apellido')
+            return
+    
+          }
+          if(!Identificacion.trim()){
+            setError('Digite la N° Identificacion')
+            return
+    
+          }
+          if(!Correo.trim()){
+            setError('Digite el Correo')
+            return
+    
+          }
+          if(!Correo.trim()){
+            setError('Digite el Correo')
+            return
+    
+          }
+          if(!Telefono.trim()){
+            setError('Ingrese el Telefono')
+            return
+    
+          }
+          if(!Fechanacimi.trim()){
+            setError('Ingrese la Fecha')
+            return
+    
+          }
+    
+    
+        const arrayEditado = Listasdatos.map(
+      item => item.id === id ? {id:id, nomN: Nombre, nomA: Apellido, nomIden: Identificacion, nomCor: Correo, nomTele: Telefono, nomFecha: Fechanacimi}:item
+        )
+        setListasdatos(arrayEditado)
+        setNombre('')
+        setApellido('')
+        setIdentificacion('')
+        setCorreo('')
+        setTelefono('')
+        setFechanacimi('')
+        setnextNombre(true)
+        setError(null)
+
       }
 
       
@@ -120,7 +178,7 @@ const Desarrollo = () => {
         </div>
         <div className='col-4'>
            
-       <form onSubmit ={guardarDatos}>
+       <form onSubmit ={nextNombre ? acepEditar : guardarDatos}>
          {
            error ? <spa className= 'text-danger'>{error} </spa> 
            : null
